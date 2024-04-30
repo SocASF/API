@@ -1,0 +1,55 @@
+{
+  "name": "ckglobapi",
+  "description": "definición de la API v2 en nuevo entorno de desarrollo para el proyecto",
+  "version": "1.0.0",
+  "module": "app.ts",
+  "type": "module",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SocASF/API.git"
+  },
+  "scripts": {
+    "dev": "bun --env-file=.env --watch app.ts",
+    "build": "bun build app.ts"
+  },
+  "keywords": [
+    "CodeInk",
+    "Service Otaku Comunity",
+    "SocASF",
+    "ASFrike",
+    "Marloy P. Harmoon Therdson",
+    "Akira Yuto Suzuki",
+    "Kevin Francisco Muñiz Herrera",
+    "Anethxa",
+    "Piwonga",
+    "Akira",
+    "Policemod27",
+    "API REST",
+    "Proyecto Global",
+    "LxingA"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/SocASF/API",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.10.4",
+    "@directus/sdk": "^15.1.0",
+    "@elysiajs/apollo": "^1.0.3",
+    "@elysiajs/bearer": "^1.0.2",
+    "@elysiajs/cors": "^1.0.2",
+    "@elysiajs/html": "^1.0.2",
+    "@elysiajs/jwt": "^1.0.2",
+    "@elysiajs/swagger": "^1.0.4",
+    "@graphql-tools/load-files": "^7.0.0",
+    "@graphql-tools/merge": "^9.0.3",
+    "@graphql-tools/schema": "^10.0.3",
+    "elysia": "^1.0.14",
+    "graphql": "^16.8.1"
+  }
+}
