@@ -1,0 +1,2 @@
+# CodeInk API
+Definición de la API Global para Todas las Aplicaciones del Proyecto. Construido en JavaScript (TS) con el Entorno de Bun. Usando el framework "ElysiaJS" como sustitución a ExpressJS para una mejor eficacía y optimización a las respuestas de mi API.

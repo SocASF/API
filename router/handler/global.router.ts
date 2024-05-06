@@ -73,12 +73,23 @@ const Global = (Application:Engine<"/global">) => Application["get"](
                     ],
                     translation: [
                         "description",
-                        "keyword"
+                        "keyword",
+                        "slogan"
                     ],
                     log: [
                         {
                             changelog_identified: [
                                 "name"
+                            ]
+                        }
+                    ],
+                    asset: [
+                        {
+                            directus_files_id: [
+                                "id",
+                                "filename_download",
+                                "type",
+                                "filesize"
                             ]
                         }
                     ]
@@ -139,7 +150,7 @@ const Global = (Application:Engine<"/global">) => Application["get"](
                                 size: _current_["project"]["cover"]["filesize"],
                                 name: _current_["project"]["cover"]["filename_download"]
                             },
-                            ...((_current_["project"]["resource"]!)["map"]((f:File) => {
+                            ...((_current_["project"]["resource"] ?? [])["map"]((f:File) => {
                                 f = (f as any)["directus_files_id"];
                                 return ({
                                     key: f["id"],
@@ -147,6 +158,15 @@ const Global = (Application:Engine<"/global">) => Application["get"](
                                     size: f["filesize"],
                                     name: f["filename_download"]
                                 })
+                            })),
+                            ...((_current_["asset"] ?? [])["map"]((a:File) => {
+                                a = (a as any)["directus_files_id"];
+                                return ({
+                                    key: a["id"],
+                                    mime: a["type"],
+                                    size: a["filesize"],
+                                    name: a["filename_download"]
+                                });
                             }))
                         ],
                         version: ((_current_["log"]!["sort"]((a,b) => {
@@ -197,7 +217,8 @@ const Global = (Application:Engine<"/global">) => Application["get"](
                             path: `https://${suffix}.${extension}`,
                             type: loader,
                             name
-                        })))
+                        }))),
+                        slogan: (_current_["translation"] as any)[0]["slogan"]
                     } as ApplicationObject);
                 break;
                 default:

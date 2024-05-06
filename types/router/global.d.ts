@@ -80,5 +80,7 @@ export interface Application {
         path: string,
         /** Tipo de Carga en el DOM de la Aplicación */
         type?: string
-    }[]
+    }[],
+    /** Definición de la Frase Típica para la Aplicación */
+    slogan?: string
 };

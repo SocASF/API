@@ -22,6 +22,8 @@ export enum Type {
 
 /** Definición del Tipo para las Aplicaciones del Proyecto */
 interface Application extends Database {
+    /** Contenedor con los Recursos Adicionales para la Aplicación del Proyecto */
+    asset?: File[],
     /** Indicar sí la Aplicación está Habilitada en el Proyecto */
     active: boolean,
     /** Nombre de la Aplicación Corto para su Identificación en el Proyecto */
@@ -40,6 +42,8 @@ interface Application extends Database {
     screenshot?: File[],
     /** Objeto con los Conceptos Esenciales de la Aplicación en Varios Idiomas para el Proyecto */
     translation: {
+        /** Frase Típica de la Aplicación para el Proyecto */
+        slogan?: string,
         /** Descripción Acerca del Propósito de la Aplicación en el Proyecto */
         description?: string,
         /** Contenedor con las Palabras Claves para el SEO de la Aplicación en el Proyecto */
