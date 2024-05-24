@@ -5,7 +5,7 @@
 @description Integración de Directus como Base de Datos para la API
 @date 26/04/24 01:00AM
 */
-import {createDirectus,rest,staticToken,readItems} from '@directus/sdk';
+import {createDirectus,rest,staticToken,readItems,readItem} from '@directus/sdk';
 import {AppConfig} from '../util/configuration';
 import type {DirectusClient,RestClient,StaticTokenClient} from '@directus/sdk';
 import type {Schema} from '../types/database';
@@ -15,6 +15,23 @@ type CodeInkClient = (DirectusClient<Schema> & RestClient<Schema> & StaticTokenC
 
 /** Instanciamos la Configuración de la Base de Datos Global */
 const configuration = (AppConfig()["database"]);
+
+/** Definición en el Objeto de la Solicitud para Inyectar el Idioma del Contexto Actual */
+const injectLanguage = (language?:string) => ({
+    deep: ({
+        translation: {
+            _filter: {
+                _and: [
+                    {
+                        language_iso: {
+                            _eq: language
+                        }
+                    }
+                ]
+            }
+        }
+    })
+});
 
 /** Definición de la Clase Global para la Aplicación */
 class Database {
@@ -33,23 +50,22 @@ class Database {
     public async get(collection:(keyof Schema),query?:any): Promise<any[] | void> {
         try{
             return (await this.#client()["request"](readItems(collection,{
-                deep: ({
-                    translation: {
-                        _filter: {
-                            _and: [
-                                {
-                                    language_iso: {
-                                        _eq: this.language
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }) as any,
+                ...(injectLanguage(this.language)),
                 ...query
             })));
         }catch(_){
             throw new Error("DatabaseErrGettedRequestedByOperation");
+        }
+    }
+    /** Obtención de un Elemento en Especifico mediante su Identificador */
+    public async one(collection:(keyof Schema),identified:string,query?:any): Promise<any | void> {
+        try{
+            return (this.#client()["request"](readItem(collection,identified,{
+                ...(injectLanguage(this.language)),
+                ...query
+            })));
+        }catch(_){
+            throw new Error("DatabaseErrGettedSingleOneRequestedByOperation");
         }
     }
 };

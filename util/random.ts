@@ -21,3 +21,6 @@ export const Keyword = (t: number = 48): string => {
     }
     return kw;
 };
+
+/** Utilidad Esencial para la Añadición de un 0 al Inicio en la Hora Especifica */
+export const ZeroHour = (hour:number): string => (hour <= 9) ? `0${hour}` : hour["toString"]();

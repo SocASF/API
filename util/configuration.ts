@@ -31,3 +31,16 @@ export const AppConfig = (): Application => ({
     },
     version: (process["env"]["CKGlobParamDefineAPIVersion"] || 1)
 });
+
+/** Definición del Contenedor con los Días en Varios Idiomas para las Aplicaciones */
+export const Days: Record<string,(string[])> = {
+    es: [
+        "Domingos",
+        "Lunes",
+        "Martes",
+        "Miércoles",
+        "Jueves",
+        "Viernes",
+        "Sábados"
+    ]
+};

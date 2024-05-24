@@ -181,12 +181,16 @@ const Global = (Application:Engine<"/global">) => Application["get"](
                         social: (_current_["project"]["social"]?.map((u,k) => {
                             const metadata: {i:string,n:string}[] = [
                                 {
-                                    i: "facebook",
+                                    i: "facebook-f",
                                     n: "fb"
                                 },
                                 {
                                     i: "twitter",
                                     n: "tt"
+                                },
+                                {
+                                    i: "store",
+                                    n: "fm"
                                 },
                                 {
                                     i: "github",

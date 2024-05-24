@@ -12,7 +12,8 @@ export enum Provider {
     "CloudFlare" = "86ed40a09085",
     "Google" = "34725045a6a5",
     "Microsoft" = "86715fe4e7ab",
-    "Hostinger" = "3d3bc154b229"
+    "Hostinger" = "3d3bc154b229",
+    "Akky" = "283df15d9c90"
 };
 
 /** Definición del Tipo para los Dominios Públicos de las Aplicaciones del Proyecto */

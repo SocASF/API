@@ -18,6 +18,7 @@ import Documentation from '@elysiajs/swagger';
 import GraphQLSchema from './graphql';
 import Router from './router';
 import type {HTTPMethod} from '@elysiajs/cors';
+import type GraphQLContext from './types/context';
 import type Response from './types/response';
 
 /** Instanciamos la Configuración Global de la Aplicación */
@@ -57,10 +58,18 @@ const Instance = (new Engine())["use"](
         includeStacktraceInErrorResponses: false,
         csrfPrevention: true,
         schema: GraphQLSchema,
-        enablePlayground: (configuration["server"]["context"] == "developer"),
+        enablePlayground: false,
         persistedQueries: {
             ttl: (60 * 30)
-        }
+        },
+        context: (async({headers}:{
+            /** Cabeceras Esenciales de la Solicitud en el Contexto de GraphQL */
+            headers: Record<string,(any)>
+        }): Promise<GraphQLContext> => {
+            return {
+                language: headers[configuration["security"]["header"][1]] ?? "es"
+            }
+        }) as any
     })
 )["onError"](
     ({code,error:{message},set}) => {
@@ -85,6 +94,7 @@ const Instance = (new Engine())["use"](
             case "VALIDATION":
                 set["status"] = 500;
                 ms = Structure["replace"]("%","ErrContextValidate");
+                console.log(message);
             break;
             case "UNKNOWN":
                 switch(message){

@@ -15,6 +15,17 @@ import type EndPoint from "./global/endpoint";
 import type Mail from "./global/mail";
 import type Member from "./global/member";
 import type Project from "./global/project";
+import type Service from "./service";
+
+/** Definición del Tipo para el Contenedor de los Many To Any en la Base de Datos */
+export type ManyToAny = {
+    /** Identificador Único (UUID) del ManyToAny(CB2) */
+    id: string,
+    /** Identificador Único (UUID) del Elemento Relacionado al ManyToAny(CB2) */
+    item: string,
+    /** Nombre de la Colección Relacionada al ManyToAny(CB2) */
+    collection: string
+};
 
 /** Definición del Tipo para los Recursos Locales de la Base de Datos */
 export type File = {
@@ -49,7 +60,7 @@ export type File = {
 };
 
 /** Definición de la Esquema para la Instancia de Directus en la Base de Datos */
-export type Schema = {
+export interface Schema extends Service {
     /** Contenedor con Todos los Idiomas Oficiales del Proyecto en la Base de Datos */
     readonly language: Language[],
     /** Contenedor con Todos los Dominios Públicos del Proyecto en la Base de Datos */

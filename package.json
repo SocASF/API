@@ -50,6 +50,7 @@
     "@graphql-tools/merge": "^9.0.3",
     "@graphql-tools/schema": "^10.0.3",
     "elysia": "^1.0.14",
-    "graphql": "^16.8.1"
+    "graphql": "^16.8.1",
+    "graphql-type-json": "^0.3.2"
   }
 }

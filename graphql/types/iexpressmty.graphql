@@ -1,0 +1,148 @@
+scalar JSON
+
+interface Response {
+    rf: String
+    ms: String
+    dt: Float!
+    st: Boolean
+}
+
+interface Pagination {
+    tt: Int!
+    pp: Int!
+}
+
+input Paginator {
+    perPage: Int!
+    currentPage: Int!
+}
+
+type sf45d2f49O_Range {
+    hour: [String!]
+    day: [String!]
+}
+
+type sf45d2f49O {
+    icon: String!
+    title: String!
+    description: String
+    range: sf45d2f49O_Range!
+}
+
+type sf45d2f49P implements Pagination {
+    tt: Int!
+    pp: Int!
+    ob: [sf45d2f49O]
+}
+
+type sf45d2f49R implements Response {
+    rf: String
+    ms: String
+    dt: Float!
+    st: Boolean
+    rs: sf45d2f49P!
+}
+
+type af3bdaeaO {
+    dateAt: String!
+    title: String!
+    description: String
+    rule: [String!]
+}
+
+type af3bdaeaP implements Pagination {
+    tt: Int!
+    pp: Int!
+    ob: [af3bdaeaO]
+}
+
+type af3bdaeaR implements Response {
+    rf: String
+    ms: String
+    dt: Float!
+    st: Boolean
+    rs: af3bdaeaP!
+}
+
+type sa8292773O {
+    cover: String!
+    name: String!
+    color: String!
+    title: String!
+    description: String
+}
+
+type sa8292773P implements Pagination {
+    tt: Int!
+    pp: Int!
+    ob: [sa8292773O]
+}
+
+type sa8292773R implements Response {
+    rf: String
+    ms: String
+    dt: Float!
+    st: Boolean
+    rs: sa8292773P!
+}
+
+type sb79e4c68OImage {
+    key: String!
+    type: String!
+    name: String!
+}
+
+type sb79e4c68O {
+    image: [sb79e4c68OImage!]
+    identified: String!
+    title: String
+}
+
+type sb79e4c68P implements Pagination {
+    tt: Int!
+    pp: Int!
+    ob: [sb79e4c68O]
+}
+
+type sb79e4c68R implements Response {
+    rf: String
+    ms: String
+    dt: Float!
+    st: Boolean
+    rs: sb79e4c68P!
+}
+
+type s1b0ecf0bOValue {
+    key: String!
+    label: String!
+    extra: JSON
+}
+
+type s1b0ecf0bO {
+    name: String!
+    label: String!
+    value: [s1b0ecf0bOValue]
+    extra: [s1b0ecf0bO]
+}
+
+type s1b0ecf0bP implements Pagination {
+    tt: Int!
+    pp: Int!
+    ob: [s1b0ecf0bO]
+}
+
+type s1b0ecf0bR implements Response {
+    rf: String
+    ms: String
+    dt: Float!
+    st: Boolean
+    rs: s1b0ecf0bP!
+}
+
+type Query {
+    sf45d2f49(name:String): sf45d2f49R!
+    af3bdaea(name:String): af3bdaeaR!
+    sa8292773(perPage:Int!,currentPage:Int!,name:String): sa8292773R!
+    sb79e4c68(id:String,categoryID:String,pagination:Paginator,sort:String): sb79e4c68R!
+    s1b0ecf0b(productID:String!): s1b0ecf0bR!
+}
