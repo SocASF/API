@@ -8,9 +8,6 @@
 import {Keyword} from '../util/random';
 import type {Application} from '../types/configuration';
 
-/** Definición de la Estructura Global para los Identificadores de Respuesta de la API */
-export const Structure: string = "CkGlobParam%";
-
 /** Definición del Objeto con la Información Global de la Aplicación */
 export const AppConfig = (): Application => ({
     database: {

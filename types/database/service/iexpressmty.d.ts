@@ -259,7 +259,16 @@ export type ProductObject = {
     /** Identificador Único del Producto en el Proyecto */
     identified: string,
     /** Título Llamativo Ilustrativo del Producto para la Aplicación */
-    title?: string
+    title?: string,
+    /** Contenedor con los Tipos de Papeles Disponibles en la Aplicación */
+    paper: {
+        /** Identificador Único del Papel en la Base de Datos */
+        identified: string,
+        /** Definición de la Altura del Papel de la Aplicación */
+        height: number,
+        /** Definición de la Anchura del Papel de la Aplicación */
+        width: number
+    }[]
 };
 
 /** Prototipo para la Definición de los Productos para la Aplicación */

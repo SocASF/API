@@ -42,6 +42,49 @@ export const Script = (): string => `
 
 /** Definición del Objeto con los Componentes Esenciales para la Plantilla HTML */
 export const Component = {
+    /** Componente con la Plantilla Predeterminada para la API */
+    Template: ({title,message,version}:{
+        /** Versión Actual de la API */
+        version: AppConfig["version"],
+        /** Titulo Descriptivo para Mostrar en la Vista */
+        title?: string,
+        /** Mensaje Descriptivo para Mostrar en la Vista */
+        message?: string
+    }): string => `
+        <html ${Param({
+            version
+        })}>
+            ${Head({
+                title: title ?? "CodeInk Service"
+            })}
+            <body>
+                <div class="container col-xxl-8">
+                    <div class="row flex-lg-row-reverse align-items-center g-5">
+                        <div class="col-10 col-sm-8 col-lg-6">
+                            <center>
+                                <img loading="lazy" class="d-block mx-lg-auto img-fluid" src="https://resource.socasf.net/illustration.png?v=553f2b54b86c"/>
+                            </center>
+                        </div>
+                        <div class="col-lg-6">
+                            <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">
+                                ${title ?? "CodeInk Service"}
+                            </h1>
+                            <p class="lead">
+                                ${message ?? "Acceso a la Información de las Aplicaciones del Proyecto"}
+                            </p>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                <button class="btn btn-primary btn-lg px-4 me-md-2" id="ckapi_servicebutton_contact">
+                                    Contacto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                ${Component["Footer"]()}
+                ${Script()}
+            </body>
+        </html>
+    `,
     /** Definición del Componente con la Cabecera de la Plantilla */
     Header: (): string => `
         <div class="container">

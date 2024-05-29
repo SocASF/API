@@ -5,41 +5,55 @@
 @description Definición del Middleware Global para la API
 @date 26/04/24 07:30PM
 */
-import {AppConfig,Structure} from './configuration';
-import {Keyword} from '../util/random';
-import type Response from '../types/response';
+import {AppConfig} from './configuration';
+import {ResponseHTML} from './response';
+import type {Request,Response,NextFunction} from 'express';
 
 /** Instanciamos la Configuración Global de la Aplicación */
 const configuration = (AppConfig());
 
-/** Checador de Seguridad en el Middleware de la API */
-export const Security = (r:Request,s:Record<string,(any)>): Response | void => {
-    if(configuration["server"]["context"] == "production"){
-        let objected: any = {
-            dt: (Date["now"]()),
-            rf: Keyword(8),
-            st: false
-        };if(!configuration["security"]["method"]["includes"](r["method"]["toUpperCase"]())){
-            s["status"] = 405;
-            objected["ms"] = Structure["replace"]("%",("SecureHTTPMethodNotAllowed"));
-            return (objected as Response);
-        }else if(!configuration["security"]["origin"]["includes"](r["referrer"]["toLowerCase"]())){
-            s["status"] = 403;
-            objected["ms"] = Structure["replace"]("%",("SecureHTTPOriginNotAllowed"));
-            return (objected as Response);
-        }
-    }
-}
-
-/** Definición del Middleware Global de la Aplicación */
-const Middleware = ({headers,set}:{
-    /** Objeto con las Cabeceras HTTP de la API */
-    headers: Record<string,(string | undefined)>,
-    /** Definir un Nuevo Contexto en el Rutador */
-    set: Record<string,(any)>
-}): void => {
-    if(!(configuration["security"]["header"][0]["toLowerCase"]() in headers)) throw new Error("MidCheckerHeaderNotSended");
-    else if(!(/^[a-z0-9]{8}\-(([a-z0-9]+\-){3,})[a-z0-9]+$/["test"](headers[configuration["security"]["header"][0]["toLowerCase"]()] ?? ""))) throw new Error("MidCheckerHeaderNotValid");
+/** Middleware Esencial para la Verificación de las Cabeceras del Servidor */
+export const MiddlewareHeader = (rq:Request,rs:Response,nt:NextFunction): void => {
+    let _init_: any = {response:rs,version:configuration["version"]};
+    if(rq["header"](configuration["security"]["header"][0])){
+        if(/[a-z0-9]{8}\-(([a-z0-9]+)\-){3}[a-z0-9]{12}/["test"](rq["header"](configuration["security"]["header"][0]) ?? "")) nt();
+        else ResponseHTML({
+            code: 400,
+            meta: {
+                title: "Identificador de la Aplicación no Valída",
+                message: "Lo sentimos, el identificador de la aplicación dado, no es valído"
+            },
+            ..._init_
+        });
+    }else ResponseHTML({
+        code: 401,
+        meta: {
+            title: "Cabecera no Definida",
+            message: "Lo sentimos, no se envío la cabecera HTTP esencial para el acceso a la API"
+        },
+        ..._init_
+    });
 };
 
-export default Middleware;
+/** Middleware Esencial para la Verificación de Seguridad de Acceso al Servidor */
+export const MiddlewareSecure = (rq:Request,rs:Response,nt:NextFunction): void => {
+    let _init_: any = {response:rs,version:configuration["version"]};
+    if(configuration["security"]["method"]["includes"](rq["method"])){
+        if(configuration["security"]["origin"]["includes"](rq["header"]("origin") || rq["header"]("referer") || "")) nt();
+        else ResponseHTML({
+            code: 403,
+            meta: {
+                title: "No Autorizado",
+                message: "Lo sentimos, no estás autorizado para acceder al servidor mediante su origen HTTP"
+            },
+            ..._init_
+        });
+    }else ResponseHTML({
+        code: 405,
+        meta: {
+            title: "Método HTTP no Permitido",
+            message: "Lo sentimos, el método HTTP de la solicitud, no está permitida"
+        },
+        ..._init_
+    });
+};

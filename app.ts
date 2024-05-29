@@ -5,29 +5,34 @@
 @description Inicialización de la API
 @date 26/04/24 12:00AM
 */
-import {join} from 'path';
-import {readFileSync} from 'fs';
 import {AppConfig} from './util/configuration';
-import HTTP from './main';
-import Server from 'bun';
+import {HTTP,Server} from './main';
+import {expressMiddleware} from '@apollo/server/express4';
+import {Component} from './util/html';
+import {MiddlewareHeader,MiddlewareSecure} from './util/middleware';
+import GraphQLServer from './bin/graphql';
+import LocalRouter from './router';
+import type {Response} from 'express';
+import type GraphQLContext from './types/context';
 
 /** Instanciamos la Configuración Global de la Aplicación */
 const configuration = (AppConfig());
 
-/** Instancia de Bun como Interprete HTTP del Servidor para la API */
-Server["serve"]({
-    port: configuration["server"]["port"],
-    reusePort: true,
-    fetch: request => HTTP["handle"](request),
-    tls: configuration["server"]["context"] == "production" ? {
-        key: readFileSync(
-            join(__dirname, "./bin/certificate.key")
-        ),
-        cert: readFileSync(
-            join(__dirname, "./bin/certificate.pem")
-        ),
-        passphrase: readFileSync(
-            join(__dirname, "./bin/certificate.pwd")
-        )["toString"]()
-    } : undefined
-});
+/** Inicialización de la API en el Contexto del Servidor */
+(async() => {
+    Server["use"]("/",(LocalRouter));
+    (await GraphQLServer["start"]());
+    Server["use"]("/graphql",[MiddlewareHeader,MiddlewareSecure],(expressMiddleware(GraphQLServer,{
+        context: (async({req}) => {
+            return ({
+                language: (req["header"](configuration["security"]["header"][1]) ?? "es")
+            } as GraphQLContext);
+        })
+    })));
+    Server["all"]("*",((_:any,rs:Response) => {
+        rs["status"](200)["setHeader"]("Content-Type","text/html")["send"](Component["Template"]({
+            version: (configuration["version"])
+        }));
+    }));
+    HTTP["listen"](configuration["server"]["port"]);
+})();
