@@ -144,6 +144,8 @@ export interface Shape extends Database {
     active: boolean,
     /** Nombre Identificable de la Forma en la Aplicación */
     name: string,
+    /** Contenedor con las Medidas para la Forma en la Aplicación */
+    measure: Size[],
     /** Objeto con los Conceptos Esenciales de la Forma en Varios Idiomas para la Aplicación */
     translation: {
         /** Etiqueta a Mostrar de la Forma en la Aplicación */
@@ -268,7 +270,9 @@ export type ProductObject = {
         height: number,
         /** Definición de la Anchura del Papel de la Aplicación */
         width: number
-    }[]
+    }[],
+    /** Permitir la Impresión por Ambos Lados para el Producto en la Aplicación */
+    allowPrintPerPage: boolean
 };
 
 /** Prototipo para la Definición de los Productos para la Aplicación */
@@ -285,11 +289,21 @@ export interface Product extends Database {
     populate?: number,
     /** Contenedor con los Atributos Vinculados al Producto para la Aplicación */
     prop: ManyToAny[],
+    /** Permitir la Impresión de Ambos Lados en el Producto para la Aplicación */
+    printPerPage: boolean,
     /** Objeto con los Conceptos Esenciales del Producto en Varios Idiomas para la Aplicación */
     translation: {
         /** Título Llamatio Ilustrativo del Producto en la Aplicación */
         title: string
     }
+};
+
+/** Prototipo para la Definición de los Modelos para las Figuras de la Aplicación */
+export interface Model extends Database {
+    /** Indicar sí el Modelo está Disponible en la Aplicación */
+    active: boolean,
+    /** Número de Identificador del Modelo en la Aplicación */
+    seal: number
 };
 
 /** Definición del Tipo para el Objeto de Respuesta de la API para la Definición de los Parámetros Esenciales para el Constructor de la Aplicación */
@@ -308,5 +322,7 @@ export type ConstructorParams = {
         extra?: any
     }[],
     /** Contenedor con las Entradas Extras Relacionadas al Contexto de la Entrada Actual para la Aplicación */
-    extra?: ConstructorParams[]
+    extra?: ConstructorParams[],
+    /** Prioridad de la Entrada en el Renderizado en el Cliente de la Aplicación */
+    priority?: number
 };

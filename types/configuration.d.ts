@@ -8,6 +8,8 @@
 
 /** Definición del Prototipo para la Configuración de la Aplicación */
 export type Application = {
+    /** Clave de Acceso a la API de Brevo para la Comunicación SMTP del Servidor */
+    smtpKey: string,
     /** Objeto con la Configuración de la Base de Datos de la Aplicación */
     database: {
         /** Ruta Absoluta HTTP del Acceso a la Base de Datos del Proyecto */

@@ -40,14 +40,17 @@ export const MiddlewareSecure = (rq:Request,rs:Response,nt:NextFunction): void =
     let _init_: any = {response:rs,version:configuration["version"]};
     if(configuration["security"]["method"]["includes"](rq["method"])){
         if(configuration["security"]["origin"]["includes"](rq["header"]("origin") || rq["header"]("referer") || "")) nt();
-        else ResponseHTML({
-            code: 403,
-            meta: {
-                title: "No Autorizado",
-                message: "Lo sentimos, no estás autorizado para acceder al servidor mediante su origen HTTP"
-            },
-            ..._init_
-        });
+        else{
+            if(configuration["security"]["ip"]["includes"](rq["clientIp"] || "")) nt();
+            else ResponseHTML({
+                code: 403,
+                meta: {
+                    title: "No Autorizado",
+                    message: "Lo sentimos, no estás autorizado para accesar a la API"
+                },
+                ..._init_
+            });
+        }
     }else ResponseHTML({
         code: 405,
         meta: {

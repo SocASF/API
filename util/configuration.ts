@@ -10,6 +10,7 @@ import type {Application} from '../types/configuration';
 
 /** Definición del Objeto con la Información Global de la Aplicación */
 export const AppConfig = (): Application => ({
+    smtpKey: (process["env"]["CKGlobParamDefineBrevoSMTPKeyAccess"]),
     database: {
         hostname: (process["env"]["CKGlobParamDefineAPIDatabasePathExecute"]),
         tokenAccess: (process["env"]["CKGlobParamDefineAPIDatabaseAccessTokenKey"]),
@@ -28,6 +29,16 @@ export const AppConfig = (): Application => ({
     },
     version: (process["env"]["CKGlobParamDefineAPIVersion"] || 1)
 });
+
+/** Definición del Objeto con las Claves Secretas de Acceso a los reCaptchas del Proyecto */
+export const reCaptcha = (): Record<string,(Record<string,string>)> => {
+    const _splitted_: string[] = (process["env"]["CKGlobParamDefineReCaptchaKeysSecret"]["split"](",") || []);
+    return ({
+        iexpressmty: {
+            formContactKey: (_splitted_[0] || "")
+        }
+    });
+};
 
 /** Definición del Contenedor con los Días en Varios Idiomas para las Aplicaciones */
 export const Days: Record<string,(string[])> = {

@@ -9,7 +9,7 @@ import {AppConfig} from './util/configuration';
 import {HTTP,Server} from './main';
 import {expressMiddleware} from '@apollo/server/express4';
 import {Component} from './util/html';
-import {MiddlewareHeader,MiddlewareSecure} from './util/middleware';
+import {MiddlewareSecure,MiddlewareHeader} from './util/middleware';
 import GraphQLServer from './bin/graphql';
 import LocalRouter from './router';
 import type {Response} from 'express';
@@ -22,10 +22,11 @@ const configuration = (AppConfig());
 (async() => {
     Server["use"]("/",(LocalRouter));
     (await GraphQLServer["start"]());
-    Server["use"]("/graphql",[MiddlewareHeader,MiddlewareSecure],(expressMiddleware(GraphQLServer,{
+    Server["use"]("/graphql",[MiddlewareSecure,MiddlewareHeader],(expressMiddleware(GraphQLServer,{
         context: (async({req}) => {
             return ({
-                language: (req["header"](configuration["security"]["header"][1]) ?? "es")
+                language: (req["header"](configuration["security"]["header"][1]) ?? "es"),
+                appID: (req["header"](configuration["security"]["header"][0]) ?? "")
             } as GraphQLContext);
         })
     })));

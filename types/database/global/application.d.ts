@@ -8,7 +8,6 @@
 import type {File} from '..';
 import type Database from "..";
 import type EndPoint from "./endpoint";
-import type ChangeLog from "../essential/changelog";
 import type Project from "./project";
 
 /** Definición del Enumerador de los Tipos de Aplicación para el Proyecto */
@@ -36,8 +35,6 @@ interface Application extends Database {
     title: string,
     /** Objeto con la Información del Proyecto Asociado a la Aplicación para el Proyecto */
     project: Project,
-    /** Contenedor con el Historial de Cambios de la Aplicación en el Proyecto */
-    log?: ChangeLog[],
     /** Contenedor con los Objetos con la Información de las Vistas Previas de la Aplicación tras el Historial de Versiones para el Proyecto */
     screenshot?: File[],
     /** Objeto con los Conceptos Esenciales de la Aplicación en Varios Idiomas para el Proyecto */
@@ -47,14 +44,12 @@ interface Application extends Database {
         /** Descripción Acerca del Propósito de la Aplicación en el Proyecto */
         description?: string,
         /** Contenedor con las Palabras Claves para el SEO de la Aplicación en el Proyecto */
-        keyword?: string[],
-        /** Definición mediante un Titulo del cómo se creó la Aplicación en el Contexto del Proyecto */
-        builder?: string,
-        /** Descripción Acerca del Contexto de Desarrollo de la Aplicación en el Proyecto */
-        summary?: string
+        keyword?: string[]
     },
     /** Identificador del Tipo de Aplicación Vinculada a la Aplicación para el Proyecto */
-    type: string
+    type: string,
+    /** Versión Actual de la Aplicación en el Proyecto */
+    version: string
 };
 
 export default Application;

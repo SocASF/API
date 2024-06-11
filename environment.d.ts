@@ -22,7 +22,11 @@ declare global {
             /** Definición de una Clave Secreta para la Autenticación JWT de la Aplicación */
             CKGlobParamDefineJWTTokenSecretKey: string,
             /** Definición de una Clave de Acceso para los Recursos Locales de la Base de Datos para la API */
-            CKGlobParamDefineAPITokenAccessResource: string
+            CKGlobParamDefineAPITokenAccessResource: string,
+            /** Definición de las Claves Secretas de los reCaptchas del Proyecto para la API (separadas por comas) */
+            CKGlobParamDefineReCaptchaKeysSecret: string,
+            /** Definición de la Clave de Acceso a la API de Brevo en el Servidor */
+            CKGlobParamDefineBrevoSMTPKeyAccess: string
         }
     }
 }

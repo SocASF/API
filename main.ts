@@ -13,6 +13,7 @@ import {readFileSync} from 'fs';
 import {join} from 'path';
 import Engine from 'express';
 import Secure from 'cors';
+import IP from 'request-ip';
 
 /** Instanciamos la Configuración Global de la Aplicación */
 const configuration = (AppConfig());
@@ -26,9 +27,10 @@ if(configuration["server"]["context"] == "production") Server["use"](Secure({
     methods: configuration["security"]["method"],
     origin: "*"
 }));
-Server["use"](json());
 Server["use"](urlencoded({extended:true}));
+Server["use"](json());
 Server["use"](hidePoweredBy());
+Server["use"](IP["mw"]());
 
 /** Instancia del Servidor HTTP en Modo SSL para el Acceso a la API */
 const HTTP = (createServer({

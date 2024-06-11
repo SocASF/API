@@ -13,7 +13,8 @@ export enum Provider {
     "Google" = "34725045a6a5",
     "Microsoft" = "86715fe4e7ab",
     "Hostinger" = "3d3bc154b229",
-    "Akky" = "283df15d9c90"
+    "Akky" = "283df15d9c90",
+    "Hostgator" = "4dee05648a27"
 };
 
 /** Definición del Tipo para los Dominios Públicos de las Aplicaciones del Proyecto */

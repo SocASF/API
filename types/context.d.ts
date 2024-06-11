@@ -9,7 +9,9 @@
 /** Definición del Prototipo para el Contexto de GraphQL en la Aplicación */
 type GraphQLContext = {
     /** Definición del Contexto del Idioma para la API */
-    language: string
+    language: string,
+    /** Identificador Único de la Aplicación Currente */
+    appID: string
 };
 
 export default GraphQLContext;

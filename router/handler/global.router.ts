@@ -23,6 +23,7 @@ const Global = async(rq:Request,rs:Response): Promise<void> => {
     const __initial__ = (new Database(rq["header"](configuration["security"]["header"][1])));
     const __application__ = (await __initial__["get"]("application", {
         fields: [
+            "version",
             {
                 project: [
                     "name",
@@ -71,13 +72,6 @@ const Global = async(rq:Request,rs:Response): Promise<void> => {
                     "description",
                     "keyword",
                     "slogan"
-                ],
-                log: [
-                    {
-                        changelog_identified: [
-                            "name"
-                        ]
-                    }
                 ],
                 asset: [
                     {
@@ -165,11 +159,7 @@ const Global = async(rq:Request,rs:Response): Promise<void> => {
                             });
                         }))
                     ],
-                    version: ((_current_["log"]!["sort"]((a, b) => {
-                        const first = Number((a as any)["changelog_identified"]["name"]["replace"](/\./g, ""));
-                        const last = Number((b as any)["changelog_identified"]["name"]["replace"](/\./g, ""));
-                        return (first < last) ? 1 : -1;
-                    }) as any)[0]["changelog_identified"]["name"]),
+                    version: _current_["version"],
                     description: ((_current_["translation"] as any)[0]["description"]),
                     keywords: ((_current_["translation"] as any)[0]["keyword"]),
                     email: `${_current_["project"]["email"]["name"]}@${_current_["project"]["email"]["domain"]["extension"]}`,

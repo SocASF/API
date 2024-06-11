@@ -92,10 +92,18 @@ type sb79e4c68OImage {
     name: String!
 }
 
+type sb79e4c68OPaper {
+    identified: String!
+    height: Int!
+    width: Int!
+}
+
 type sb79e4c68O {
     image: [sb79e4c68OImage!]
     identified: String!
     title: String
+    paper: [sb79e4c68OPaper!]
+    allowPrintPerPage: Boolean!
 }
 
 type sb79e4c68P implements Pagination {
@@ -123,6 +131,7 @@ type s1b0ecf0bO {
     label: String!
     value: [s1b0ecf0bOValue]
     extra: [s1b0ecf0bO]
+    priority: Int
 }
 
 type s1b0ecf0bP implements Pagination {
@@ -139,10 +148,43 @@ type s1b0ecf0bR implements Response {
     rs: s1b0ecf0bP!
 }
 
+type sf826fc26O {
+    price: Float!
+}
+
+type sf826fc26P implements Pagination {
+    tt: Int!
+    pp: Int!
+    ob: [sf826fc26O]
+}
+
+type sf826fc26R implements Response {
+    rf: String
+    ms: String
+    dt: Float!
+    st: Boolean
+    rs: sf826fc26P!
+}
+
+input sf826fc26Request {
+    current: JSON!
+    product: String!
+}
+
 type Query {
     sf45d2f49(name:String): sf45d2f49R!
     af3bdaea(name:String): af3bdaeaR!
     sa8292773(perPage:Int!,currentPage:Int!,name:String): sa8292773R!
     sb79e4c68(id:String,categoryID:String,pagination:Paginator,sort:String): sb79e4c68R!
     s1b0ecf0b(productID:String!): s1b0ecf0bR!
+    sf826fc26(currentContext:sf826fc26Request!): sf826fc26R!
+}
+
+type sac76de82O {
+    message: String
+    state: Boolean!
+}
+
+type Mutation {
+    sac76de82(body:JSON!,captchaKey:String!): sac76de82O
 }

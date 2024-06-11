@@ -5,9 +5,6 @@
 @description Definición del Tipo para la Base de Datos del Proyecto
 @date 28/04/24 01:00AM
 */
-import type ChangeLog from "./essential/changelog";
-import type Study from "./essential/study";
-import type Work from "./essential/work";
 import type Application from "./global/application";
 import type Language from "./global/language";
 import type Domain from "./global/domain";
@@ -69,12 +66,6 @@ export interface Schema extends Service {
     readonly endpoint: EndPoint[],
     /** Contenedor con Todos los Correos Electrónicos del Proyecto en la Base de Datos */
     readonly mail: Mail[],
-    /** Contenedor con el Historial de Cambios de las Aplicaciones del Proyecto en la Base de Datos */
-    readonly changelog: ChangeLog[],
-    /** Contenedor con los Estudios de los Miembros del Proyecto en la Base de Datos */
-    readonly study: Study[],
-    /** Contenedor con las Experiencias Laborales de los Miembros del Proyecto en la Base de Datos */
-    readonly work: Work[],
     /** Contenedor con Todos los Miembros Oficiales del Proyecto en la Base de Datos */
     readonly member: Member[],
     /** Contenedor con Todos los Proyectos Internos del Proyecto en la Base de Datos */

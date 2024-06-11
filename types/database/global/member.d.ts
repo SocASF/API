@@ -8,8 +8,6 @@
 import type {File} from '..';
 import type Database from "..";
 import type Mail from "./mail";
-import type Study from "../essential/study";
-import type Work from "../essential/work";
 
 /** Definición del Tipo para los Miembros Oficiales del Proyecto */
 interface Member extends Database {
@@ -26,16 +24,10 @@ interface Member extends Database {
     /** Objeto con los Conceptos Esenciales del Miembro Oficial para Varios Idiomas para el Proyecto */
     translation: {
         /** Titulo Profesional del Miembro Oficial en el Proyecto */
-        title?: string,
-        /** Resumén Descriptivo en el Concepto Profesional del Miembro Oficial en el Proyecto */
-        summary?: string
+        title?: string
     },
     /** Contenedor con los Nombres Alternativos del Miembro Oficial en el Proyecto */
     alternative?: string[],
-    /** Contenedor con las Experiencias Laborales del Miembro Oficial en el Proyecto */
-    job?: Work[],
-    /** Contenedor con los Estudios Académicos del Miembro Oficial en el Proyecto */
-    study?: Study[],
     /** Objeto con la Información de la Foto de Perfil Profesional del Miembro Oficial en el Proyecto */
     public?: File,
     /** Contenedor con los Apodos Oficiales del Miembro Oficial en el Proyecto */

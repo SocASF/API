@@ -1,0 +1,28 @@
+scalar JSON
+
+type f544e1445O_Illustration {
+    type: String!
+    key: String!
+    name: String!
+}
+
+type f544e1445O {
+    title: String!
+    illustration: [f544e1445O_Illustration!]
+    key: String!
+    description: String
+}
+
+type f544e1445P {
+    tt: Int
+    pp: Int
+    ob: [f544e1445O!]
+}
+
+type f544e1445R {
+    rs: f544e1445P
+}
+
+type Query {
+    f544e1445: f544e1445R!
+}
