@@ -6,7 +6,7 @@
 @date 08/05/24 02:00AM
 */
 import type {Banner,Schedule,Policy,Material,MaterialVariant,Paper,Shape,Size,Color,Grammage,Orientation,Laminate,Category,Product,Model} from './service/iexpressmty';
-import type {Game} from './service/ckvideopub';
+import type {Game,Character,Video} from './service/ckvideopub';
 
 /** Prototipo de los Servicios de la Aplicación */
 interface Service {
@@ -41,7 +41,11 @@ interface Service {
     /** Contenedor con los Modelos Esenciales para las Figuras de los Productos de la Aplicación "IExpressMTY" */
     iexgmModel: Model[],
     /** Contenedor con los Juegos Esenciales para los Vídeos Públicos de la Aplicación "CKVideoPub" */
-    ckpGame: Game[]
+    ckpGame: Game[],
+    /** Contenedor con los Personajes Esenciales para los Vídeos Públicos de la Aplicación "CKVideoPub" */
+    ckpCharacter: Character[],
+    /** Contenedor con los Vídeos Esenciales de la Aplicación "CKVideoPub" */
+    ckpVideo: Video[]
 };
 
 export default Service;

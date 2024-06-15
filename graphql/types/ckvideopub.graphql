@@ -11,6 +11,14 @@ type f544e1445O {
     illustration: [f544e1445O_Illustration!]
     key: String!
     description: String
+    createAt: String!
+    populate: Int!
+    available: Boolean!
+}
+
+input f544e1445I {
+    a3f53e411: Int!
+    af0afffd2: Int!
 }
 
 type f544e1445P {
@@ -23,6 +31,45 @@ type f544e1445R {
     rs: f544e1445P
 }
 
+type fbd45e939O_Illustration {
+    name: String!
+    key: String!
+}
+
+type fbd45e939O_Character {
+    label: String!
+    description: String
+    illustration: [fbd45e939O_Illustration!]
+    key: String!
+}
+
+type fbd45e939O {
+    thumbnail: String!
+    title: String!
+    description: String
+    key: String!
+    character: fbd45e939O_Character
+    view: Int!
+    endpoint: String!
+    createAt: String!
+}
+
+input fbd45e939I {
+    a3f53e411: Int!
+    af0afffd2: Int!
+}
+
+type fbd45e939P {
+    tt: Int
+    pp: Int
+    ob: [fbd45e939O!]
+}
+
+type fbd45e939R {
+    rs: fbd45e939P
+}
+
 type Query {
-    f544e1445: f544e1445R!
+    f544e1445(ac10fa519:f544e1445I): f544e1445R!
+    fbd45e939(ad73b976c:String!,ac10fa519:fbd45e939I,a4ee44f99:String,a0e95a8b1:String,e10794ae:Boolean): fbd45e939R!
 }
