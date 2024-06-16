@@ -14,6 +14,7 @@ import type {File} from '../../types/database';
 import type DBApplication from '../../types/database/global/application';
 import type DBEndPoint from '../../types/database/global/endpoint';
 import type DBLanguage from '../../types/database/global/language';
+import type DBEmail from '../../types/database/global/mail';
 
 /** Instanciamos la Configuración Global de la Aplicación */
 const configuration = (AppConfig());
@@ -21,7 +22,7 @@ const configuration = (AppConfig());
 /** Definición del Contexto Global para el Rutador de la Aplicación */
 const Global = async(rq:Request,rs:Response): Promise<void> => {
     const __initial__ = (new Database(rq["header"](configuration["security"]["header"][1])));
-    const __application__ = (await __initial__["get"]("application", {
+    const __application__ = (await __initial__["get"]("application",{
         fields: [
             "version",
             {
@@ -95,7 +96,7 @@ const Global = async(rq:Request,rs:Response): Promise<void> => {
         },
         limit: 1
     })) as DBApplication[];
-    const __language__ = (await __initial__["get"]("language", {
+    const __language__ = (await __initial__["get"]("language",{
         fields: [
             "label",
             "iso"
@@ -106,7 +107,7 @@ const Global = async(rq:Request,rs:Response): Promise<void> => {
             }
         }
     })) as DBLanguage[];
-    const __endpoint__ = (await __initial__["get"]("endpoint", {
+    const __endpoint__ = (await __initial__["get"]("endpoint",{
         fields: [
             "name",
             "suffix",
@@ -118,6 +119,21 @@ const Global = async(rq:Request,rs:Response): Promise<void> => {
             "loader"
         ]
     })) as DBEndPoint[];
+    const __email__ = (await __initial__["get"]("mail",{
+        fields: [
+            "name",
+            {
+                domain: [
+                    "extension"
+                ]
+            }
+        ],
+        filter: {
+            name: {
+                _eq: "soporte"
+            }
+        }
+    }))![0] as DBEmail;
     if (__application__["length"] > 0) {
         let _objected_: any = {};
         const _current_ = (__application__[0]);
@@ -179,7 +195,7 @@ const Global = async(rq:Request,rs:Response): Promise<void> => {
                             size: _current_["project"]["cover"]["filesize"],
                             name: _current_["project"]["cover"]["filename_download"]
                         },
-                        ...((_current_["project"]["resource"] ?? [])["map"]((f: File) => {
+                        ...((_current_["project"]["resource"] ?? [])["map"]((f:File) => {
                             f = (f as any)["directus_files_id"];
                             return ({
                                 key: f["id"],
@@ -188,7 +204,7 @@ const Global = async(rq:Request,rs:Response): Promise<void> => {
                                 name: f["filename_download"]
                             })
                         })),
-                        ...((_current_["asset"] ?? [])["map"]((a: File) => {
+                        ...((_current_["asset"] ?? [])["map"]((a:File) => {
                             a = (a as any)["directus_files_id"];
                             return ({
                                 key: a["id"],
@@ -215,16 +231,17 @@ const Global = async(rq:Request,rs:Response): Promise<void> => {
                         country: (_current_["project"]["location"][6])
                     }) : undefined),
                     project: (_current_["project"]["name"]),
-                    language: (__language__["map"](({ label, iso }) => ({
+                    language: (__language__["map"](({label,iso}) => ({
                         label,
                         iso
                     }))),
-                    endpoint: (__endpoint__["map"](({ suffix, name, domain: { extension }, loader }) => ({
+                    endpoint: (__endpoint__["map"](({suffix,name,domain:{extension},loader}) => ({
                         path: `https://${suffix}.${extension}`,
                         type: loader,
                         name
                     }))),
-                    slogan: (_current_["translation"] as any)[0]["slogan"]
+                    slogan: (_current_["translation"] as any)[0]["slogan"],
+                    support: `${__email__["name"]}@${__email__["domain"]["extension"]}`
                 } as ApplicationObject);
                 break;
             default:
