@@ -123,7 +123,46 @@ const Global = async(rq:Request,rs:Response): Promise<void> => {
         const _current_ = (__application__[0]);
         switch(rq["query"]["context"]){
             case "application":
-                _objected_ = ({
+                const social: ApplicationObject["social"] = [];
+                for(let o = 0; o <= (_current_["project"]["social"]!["length"] - 1); o++){
+                    let j: any = {url:(_current_["project"]["social"]![o])};
+                    switch(o){
+                        case 0:
+                            j["icon"] = "facebook-f";
+                            j["name"] = "fb";
+                            social["push"](j);
+                        break;
+                        case 1:
+                            j["icon"] = "twitter";
+                            j["name"] = "tt";
+                            social["push"](j);
+                        break;
+                        case 2:
+                            if(!(_current_["project"]["social"]![o]["includes"]("marketplace"))) continue;
+                            else{
+                                j["icon"] = "store";
+                                j["name"] = "fm";
+                                social["push"](j);
+                            }
+                        break;
+                        case 3:
+                            if(!(_current_["project"]["social"]![o]["startsWith"]("github"))) continue;
+                            else{
+                                j["icon"] = "github";
+                                j["name"] = "gb";
+                                social["push"](j);
+                            }
+                        break;
+                        case 4:
+                            if(!(_current_["project"]["social"]![o]["startsWith"]("youtube"))) continue;
+                            else{
+                                j["icon"] = "youtube";
+                                j["name"] = "yt";
+                                social["push"](j);
+                            }
+                        break;
+                    }
+                }_objected_ = ({
                     token: (configuration["database"]["resourceAccess"]),
                     identified: (_current_["name"]),
                     name: (_current_["title"]),
@@ -164,30 +203,7 @@ const Global = async(rq:Request,rs:Response): Promise<void> => {
                     keywords: ((_current_["translation"] as any)[0]["keyword"]),
                     email: `${_current_["project"]["email"]["name"]}@${_current_["project"]["email"]["domain"]["extension"]}`,
                     telephone: (_current_["project"]["telephone"]),
-                    social: (_current_["project"]["social"]?.map((u, k) => {
-                        const metadata: { i: string, n: string }[] = [
-                            {
-                                i: "facebook-f",
-                                n: "fb"
-                            },
-                            {
-                                i: "twitter",
-                                n: "tt"
-                            },
-                            {
-                                i: "store",
-                                n: "fm"
-                            },
-                            {
-                                i: "github",
-                                n: "gb"
-                            }
-                        ]; return ({
-                            name: metadata[k]["n"],
-                            icon: metadata[k]["i"],
-                            url: "https://" + u
-                        });
-                    })),
+                    social,
                     alternative: (_current_["project"]["alternative"]),
                     location: (_current_["project"]["location"] ? ({
                         street: (_current_["project"]["location"][0]),
