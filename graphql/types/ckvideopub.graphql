@@ -13,7 +13,8 @@ type f544e1445O {
     description: String
     createAt: String!
     populate: Int!
-    available: Boolean!
+    available: Boolean!,
+    videos: Int!
 }
 
 input f544e1445I {
@@ -70,6 +71,6 @@ type fbd45e939R {
 }
 
 type Query {
-    f544e1445(ac10fa519:f544e1445I): f544e1445R!
-    fbd45e939(ad73b976c:String!,ac10fa519:fbd45e939I,a4ee44f99:String,a0e95a8b1:String,e10794ae:Boolean): fbd45e939R!
+    f544e1445(ac10fa519:f544e1445I,a7fc45f1d:String): f544e1445R!
+    fbd45e939(ad73b976c:String!,ac10fa519:fbd45e939I,a4ee44f99:String,a0e95a8b1:String,e10794ae:Boolean,a7fc45f1d:String): fbd45e939R!
 }

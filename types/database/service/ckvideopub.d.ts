@@ -30,7 +30,9 @@ export type GameObject = {
     /** Calificación General del Administrador en el Juego para la Aplicación */
     populate: number,
     /** Indicador sí el Juego está Disponible para su Acceso a la Aplicación */
-    available: boolean
+    available: boolean,
+    /** Total de Vídeos Publicados del Juego Currente para la Aplicación */
+    videos: number
 };
 
 /** Definición del Prototipo para los Juegos de la Aplicación */
