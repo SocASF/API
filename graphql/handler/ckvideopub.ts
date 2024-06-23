@@ -10,7 +10,8 @@ import {GraphQLCatch,GraphQLResponse} from '../../util/graphql';
 import {GraphQLJSON} from 'graphql-type-json';
 import {createHash} from 'crypto';
 import Database from '../../bin/database';
-import type {Game,GameObject,Video,VideoObject} from '../../types/database/service/ckvideopub';
+import type {Game,GameObject,Video,VideoObject,Comment,CommentObject} from '../../types/database/service/ckvideopub';
+import type {GraphQLMutateResponse} from '../../types/response';
 import type GraphQLContext from '../../types/context';
 import type Response from '../../types/response';
 
@@ -21,6 +22,69 @@ const bunny = (BunnyCDNStream());
 export default {
     /** Integración del Escalar JSON para el Contexto */
     JSON: GraphQLJSON,
+    /** Contenedor con los Tipos de Handlers Mutadores para GraphQL */
+    Mutation: {
+        /** Definición del Mutador para la Alteración de los Me Gusta de un Vídeo de la Aplicación */
+        async fd38f7f3e(_,{a4ee44f99,a994efdc3}:{
+            /** Identificador Único (UUID) del Vídeo para su Mutación en la Base de Datos */
+            a4ee44f99: string,
+            /** Me Gusta Actual del Vídeo desde el Cliente para la Mutación de la Solicitud */
+            a994efdc3: number
+        },{language}:GraphQLContext): Promise<GraphQLMutateResponse> {
+            const _db_ = (new Database(language));
+            try{
+                const {like}: Video = (await _db_["updateOne"]("ckpVideo",a4ee44f99,{
+                    like: (a994efdc3 + 1)
+                })) as any;
+                return ({
+                    status: true,
+                    message: "Se ha actualizado con éxito la estádistica en el vídeo solicitado",
+                    context: {
+                        newLikedContext: like
+                    }
+                });
+            }catch(e){
+                return ({
+                    status: false,
+                    message: (e as any)
+                });
+            }
+        },
+        /** Mutador para la Creación de un Comentario de un Vídeo para la Aplicación */
+        async fd613979c(_,{a7fa34be8,ae08f6691,c55b1270}:{
+            /** Identificador Único del Vídeo Actual para el Comentario */
+            a7fa34be8: string,
+            /** Objeto con los Valores Definidos por el Cliente para el Comentario */
+            ae08f6691: {
+                /** Nombre del Usuario que Publicará el Comentario */
+                name: string,
+                /** Mensaje Definido por el Usuario desde el Cliente para el Comentario */
+                message: string
+            },
+            /** Identificación Única (UUID) del Avatar para la Inyección en el Comentario */
+            c55b1270?: string
+        },{language}:GraphQLContext): Promise<GraphQLMutateResponse> {
+            const _instance_ = (new Database(language))["getClient"]();
+            const {createItem} = (await import("@directus/sdk"));
+            (await _instance_["request"](createItem("ckpComment",({
+                name: ae08f6691["name"],
+                message: ae08f6691["message"],
+                video: (a7fa34be8 as any),
+                avatar: (c55b1270 as any)
+            }))));
+            try{
+                return ({
+                    status: true,
+                    message: "Se ha creado con éxito el comentario"
+                });
+            }catch(e){
+                return ({
+                    status: false,
+                    message: (e as any)
+                });
+            }
+        }
+    },
     /** Contenedor con los Tipos de Handlers para GraphQL */
     Query: {
         /** Definición del Objeto con la Información del Juego para la Aplicación */
@@ -62,6 +126,8 @@ export default {
                         "name",
                         "date_created",
                         "score",
+                        "genre",
+                        "platform",
                         {
                             cover: [
                                 "id",
@@ -88,7 +154,8 @@ export default {
                 }))!;
                 let _container_: GameObject[] = [];
                 (await Promise["all"](
-                    (_instance_["map"](async({name,cover,icon,translation,identified,date_created,score,active,background},iterator) => {
+                    (_instance_["map"](async({name,cover,icon,translation,identified,date_created,score,active,background,genre,platform},iterator) => {
+                        const category: GameObject["category"] = [];
                         const illustration = [
                             {
                                 name: cover["filename_download"]["split"](".")[0],
@@ -111,7 +178,13 @@ export default {
                                     identified
                                 }
                             }
-                        }))!;
+                        }))!;if(platform) category["push"]({
+                            name: "platform",
+                            value: platform
+                        });if(genre) category["push"]({
+                            name: "genre",
+                            value: genre
+                        });
                         _container_[iterator] = ({
                             title: name,
                             illustration,
@@ -120,7 +193,8 @@ export default {
                             createAt: date_created,
                             populate: score,
                             available: active,
-                            videos: _video_["length"]
+                            videos: _video_["length"],
+                            category
                         } as GameObject);
                     }))
                 ));
@@ -186,6 +260,7 @@ export default {
                         "date_created",
                         "identified",
                         "key",
+                        "like",
                         {
                             cover: [
                                 "id"
@@ -237,7 +312,7 @@ export default {
                 }))!;
                 const _mutated_: VideoObject[] = [];
                 (await Promise["all"](
-                    (_instance_["map"](async({cover,translation,identified,character,key,date_created},iterator) => {
+                    (_instance_["map"](async({cover,translation,identified,character,key,date_created,like},iterator) => {
                         const _bcdn_ = (await (await fetch(`https://video.bunnycdn.com/library/${bunny["ckvideopub"]["container"]["libraryID"]}/videos/${key}`,{
                             cache: "force-cache",
                             headers: {
@@ -274,7 +349,9 @@ export default {
                             character: (character ? _character_ : undefined),
                             view: _bcdn_["views"],
                             endpoint: `https://iframe.mediadelivery.net/embed/${_bcdn_["videoLibraryId"]}/${_bcdn_["guid"]}?token=${createHash("sha256")["update"](`${bunny["ckvideopub"]["container"]["secretKey"]}${key}${_timer_}`)["digest"]("hex")}&expires=${_timer_}&autoplay=false&loop=false&muted=false&preload=false&responsive=true`,
-                            createAt: date_created
+                            createAt: date_created,
+                            duration: _bcdn_["length"],
+                            populate: like
                         } as VideoObject));
                     }))
                 ));
@@ -282,6 +359,66 @@ export default {
                     tt: (_video_["length"]),
                     pp: (Math["ceil"](_video_["length"] / Number(ac10fa519?.a3f53e411 ?? 1))),
                     ob: _mutated_
+                }));
+            }catch(e){
+                GraphQLCatch(e);
+            }
+        },
+        /** Obtención de Todos los Comentarios Relacionados a un Vídeo de la Aplicación */
+        async fb48e8d58(_,{a7fa34be8,abbe88fb2}:{
+            /** Identificador Único (UUID) del Vídeo Currente para los Comentarios */
+            a7fa34be8: string,
+            /** Objeto para la Definición de la Paginación de los Comentarios */
+            abbe88fb2: {
+                /** Total de Comentarios a Mostrar por Página */
+                ab456473a: number,
+                /** Página Actual en la Vista de los Comentarios en el Cliente */
+                a2db3c45a: number
+            }
+        },{language}:GraphQLContext): Promise<Response | void> {
+            const _db_ = (new Database(language));
+            try{
+                const _all_: Comment[] = (await _db_["get"]("ckpComment",{
+                    fields: [],
+                    filter: {
+                        video: {
+                            identified: {
+                                _eq: a7fa34be8
+                            }
+                        }
+                    }
+                }))!;
+                const _comments_: Comment[] = (await _db_["get"]("ckpComment",{
+                    fields: [
+                        {
+                            avatar: [
+                                "id"
+                            ]
+                        },
+                        "name",
+                        "message",
+                        "date_created"
+                    ],
+                    filter: {
+                        video: {
+                            identified: {
+                                _eq: a7fa34be8
+                            }
+                        }
+                    },
+                    sort: ["-date_created"],
+                    page: abbe88fb2["a2db3c45a"],
+                    limit: abbe88fb2["ab456473a"]
+                }))!;
+                return (GraphQLResponse({
+                    tt: (_all_["length"]),
+                    pp: (Math["ceil"](_all_["length"] / abbe88fb2["ab456473a"])),
+                    ob: (_comments_["map"](({avatar,name,message,date_created}) => ({
+                        image: avatar?.id,
+                        createAt: date_created,
+                        name,
+                        message
+                    } as CommentObject)))
                 }));
             }catch(e){
                 GraphQLCatch(e);

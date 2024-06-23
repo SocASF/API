@@ -5,7 +5,7 @@
 @description Integración de Directus como Base de Datos para la API
 @date 26/04/24 01:00AM
 */
-import {createDirectus,rest,staticToken,readItems,readItem} from '@directus/sdk';
+import {createDirectus,rest,staticToken,readItems,readItem,updateItem} from '@directus/sdk';
 import {AppConfig} from '../util/configuration';
 import type {DirectusClient,RestClient,StaticTokenClient} from '@directus/sdk';
 import type {Schema} from '../types/database';
@@ -46,6 +46,10 @@ class Database {
         const instance = (createDirectus<Schema>(configuration["hostname"]))["with"](rest())["with"](staticToken(configuration["tokenAccess"]));
         return (instance as CodeInkClient);
     }
+    /** Retornar la Definición de la Instancia Actual del Cliente con sus Métodos Establecidos */
+    public getClient(): CodeInkClient {
+        return this.#client();
+    }
     /** Obtención de Información de una Colección en la Base de Datos */
     public async get(collection:(keyof Schema),query?:any): Promise<any[] | void> {
         try{
@@ -60,12 +64,20 @@ class Database {
     /** Obtención de un Elemento en Especifico mediante su Identificador */
     public async one(collection:(keyof Schema),identified:string,query?:any): Promise<any | void> {
         try{
-            return (this.#client()["request"](readItem(collection,identified,{
+            return (await this.#client()["request"](readItem(collection,identified,{
                 ...(injectLanguage(this.language)),
                 ...query
             })));
         }catch(_){
             throw new Error("DatabaseErrGettedSingleOneRequestedByOperation");
+        }
+    }
+    /** Mutación de un Elemento de la Base de Datos mediante su Identificador */
+    public async updateOne(collection:(keyof Schema),identified:string,partial:{}){
+        try{
+            return (await this.#client()["request"](updateItem(collection,identified,partial)));
+        }catch(_){
+            throw new Error("DatabaseErrMutattedSingleOneRequestedByOperation");
         }
     }
 };

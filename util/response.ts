@@ -40,7 +40,7 @@ export const ResponseObject = ({response,status,object}:{
     status: boolean,
     /** Objeto con la Respuesta Solicitada por el Cliente en el Servidor */
     object: any
-}): any => response["status"](200)["jsonp"]({
+}): any => response["status"](200)["setHeader"]("Content-Type","application/json")["jsonp"]({
     dt: (Date["now"]()),
     rf: (Keyword(8)),
     st: status,

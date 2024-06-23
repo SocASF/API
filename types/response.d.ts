@@ -16,6 +16,16 @@ export type ResponsePaginator = {
     pp: number
 };
 
+/** Definición del Objeto de Respuesta Predeterminada para las Mutaciones de GraphQL */
+export type GraphQLMutateResponse = {
+    /** Estado de la Solicitud en la API para el Cliente */
+    status: boolean,
+    /** Mensaje Descriptivo Respecto a la Operación Solicitada por el Cliente */
+    message: string,
+    /** Objeto con la Información Parcial para el Contexto del Cliente */
+    context?: any
+};
+
 /** Definición del Objeto de la Respuesta de la API */
 type ResponseAPI = {
     /** Identificador Único de Referencia */

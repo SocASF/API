@@ -1,9 +1,20 @@
 scalar JSON
 
+type GraphQLMutatedResponse {
+    status: Boolean!
+    message: String!
+    context: JSON
+}
+
 type f544e1445O_Illustration {
     type: String!
     key: String!
     name: String!
+}
+
+type f544e1445O_Category {
+    name: String!
+    value: [String!]!
 }
 
 type f544e1445O {
@@ -15,6 +26,7 @@ type f544e1445O {
     populate: Int!
     available: Boolean!,
     videos: Int!
+    category: [f544e1445O_Category]
 }
 
 input f544e1445I {
@@ -53,6 +65,8 @@ type fbd45e939O {
     view: Int!
     endpoint: String!
     createAt: String!
+    duration: Int!
+    populate: Int!
 }
 
 input fbd45e939I {
@@ -70,7 +84,40 @@ type fbd45e939R {
     rs: fbd45e939P
 }
 
+type fb48e8d58O {
+    image: String
+    createAt: String!
+    name: String!
+    message: String!
+}
+
+type fb48e8d58P {
+    tt: Int
+    pp: Int
+    ob: [fb48e8d58O!]
+}
+
+type fb48e8d58R {
+    rs: fb48e8d58P
+}
+
+input fb48e8d58I {
+    ab456473a: Int!
+    a2db3c45a: Int!
+}
+
 type Query {
     f544e1445(ac10fa519:f544e1445I,a7fc45f1d:String): f544e1445R!
     fbd45e939(ad73b976c:String!,ac10fa519:fbd45e939I,a4ee44f99:String,a0e95a8b1:String,e10794ae:Boolean,a7fc45f1d:String): fbd45e939R!
+    fb48e8d58(a7fa34be8:String!,abbe88fb2:fb48e8d58I!): fb48e8d58R!
+}
+
+input fd613979cI_Value {
+    name: String!
+    message: String!
+}
+
+type Mutation {
+    fd38f7f3e(a4ee44f99:String!,a994efdc3:Int!): GraphQLMutatedResponse
+    fd613979c(a7fa34be8:String!,ae08f6691:fd613979cI_Value!,c55b1270:String): GraphQLMutatedResponse
 }

@@ -32,7 +32,14 @@ export type GameObject = {
     /** Indicador sí el Juego está Disponible para su Acceso a la Aplicación */
     available: boolean,
     /** Total de Vídeos Publicados del Juego Currente para la Aplicación */
-    videos: number
+    videos: number,
+    /** Contenedor con las Categorías Definidas del Juego en la Base de Datos para la Aplicación */
+    category: {
+        /** Definición del Tipo de Categoría para el Juego en la Aplicación */
+        name: "platform" | "genre",
+        /** Valor Currente en la Base de Datos de la Categoría del Juego en la Aplicación */
+        value: string[]
+    }[]
 };
 
 /** Definición del Prototipo para los Juegos de la Aplicación */
@@ -49,6 +56,10 @@ export interface Game extends Database {
     name: string,
     /** Puntuación de Calificación de Parte del Desarrollador Respecto al Juego en la Aplicación */
     score: number,
+    /** Contenedor con los Tipos de Géneros del Juego para la Aplicación */
+    genre?: string[],
+    /** Contenedor con las Plataformas Definidas del Juego para la Aplicación */
+    platform?: string[],
     /** Objeto con los Conceptos Esenciales del Juego en Varios Idiomas para la Aplicación */
     translation: {
         /** Descripción Acerca del Propósito del Juego en la Aplicación */
@@ -109,7 +120,11 @@ export type VideoObject = {
     /** Ruta Absoluta HTTP del Punto Final para el Acceso al Vídeo Incrustado para la Aplicación */
     endpoint: string,
     /** Fecha de Creación del Vídeo en la Base de Datos de la Aplicación */
-    createAt: string
+    createAt: string,
+    /** Duración del Video en HH:MM:SS para la Aplicación en Base de los Segundos en BunnyCDN Stream */
+    duration: number,
+    /** Total de Popularidad mediante Me Gusta de los Espectadores para la Aplicación */
+    populate: number
 };
 
 /** Definición del Prototipo para los Vídeos de la Aplicación */
@@ -122,6 +137,10 @@ export interface Video extends Database {
     game: Game,
     /** Objeto con la Información del Personaje Asociado al Vídeo para la Aplicación */
     character?: Character,
+    /** Popularidad del Vídeo en el Proyecto para la Aplicación */
+    like: number,
+    /** Contenedor con las Etiquetas Identificadoras del Vídeo en la Aplicación */
+    tag?: string[],
     /** Objeto con los Conceptos Esenciales del Vídeo en Varios Idiomas para la Aplicación */
     translation: {
         /** Titulo Descriptivo del Vídeo en la Aplicación */
@@ -129,4 +148,28 @@ export interface Video extends Database {
         /** Descripción Acerca del Propósito del Vídeo en la Aplicación */
         description?: string
     }
+};
+
+/** Definición del Objeto de Respuesta de un Comentario para la Aplicación */
+export type CommentObject = {
+    /** Identificador Único (UUID) del Avatar Asociado al Comentario para la Aplicación */
+    image?: string,
+    /** Nombre del Usuario que Públicó el Comentario en la Aplicación */
+    name: string,
+    /** Mensaje del Comentario que Publicó el Usuario en la Aplicación */
+    message: string,
+    /** Fecha de Publicación del Comentario en Formato ISO para la Aplicación */
+    createAt: string
+};
+
+/** Definición del Prototipo para los Comentarios de los Vídeos de la Aplicación */
+export interface Comment extends Database {
+    /** Objeto con la Información del Avatar Vinculado al Comentario para la Aplicación */
+    avatar?: File,
+    /** Nombre del Usuario que Publicó el Comentario en la Aplicación */
+    name: string,
+    /** Descripción Acerca del Mensaje Publicado por el Usuario en la Aplicación */
+    message: string,
+    /** Objeto con la Referencia del Vídeo Asociado al Comentario para la Aplicación */
+    video: Video
 };
