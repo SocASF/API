@@ -40,28 +40,16 @@ export const reCaptcha = (): Record<string,(Record<string,string>)> => {
     });
 };
 
-/** Definición del Objeto con las Claves Secretas de Acceso a BunnyCDN Stream del Proyecto */
-export const BunnyCDNStream = (): Record<string,(Record<string,({
-    /** Clave de Acceso Secreto para la API de BunnyCDN Stream */
-    accessKey: string,
-    /** Identificador Númerico de la Librería para el Acceso a la API de BunnyCDN Stream */
-    libraryID: number,
-    /** Clave Secreto para la Encriptación de los Vídeos de BunnyCDN Stream del Proyecto */
-    secretKey: string
-})>)> => {
-    const _accessKey_: string[] = (process["env"]["CKGlobParamDefineBunnyCDNStreamAccessKey"]["split"](",") || []);
-    const _libraryID_: string[] = (process["env"]["CKGlobParamDefineBunnyCDNStreamLibraryID"]["split"](",") || []);
-    const _secretKey_: string[] = (process["env"]["CKGlobParamDefineBunnyCDNStreamHashedSecretKey"]["split"](",") || []);
-    return ({
-        ckvideopub: {
-            container: {
-                accessKey: _accessKey_[0],
-                libraryID: Number(_libraryID_[0]),
-                secretKey: _secretKey_[0]
-            }
-        }
-    });
-};
+/** Definición del Objeto con las Claves Secretas de Acceso a CloudFlare Stream del Proyecto */
+export const CloudFlareStream = (): {
+    /** Identificador de la Cuenta Vinculado al Proyecto */
+    accountID: string,
+    /** Clave de Acceso Secreto para el Acceso a la API de CloudFlare */
+    tokenAccess: string
+} => ({
+    accountID: (process["env"]["CKGlobParamDefineCloudFlareAccountIdentified"]),
+    tokenAccess: (process["env"]["CKGlobParamDefineCloudFlareStreamAccessToken"])
+});
 
 /** Definición del Contenedor con los Días en Varios Idiomas para las Aplicaciones */
 export const Days: Record<string,(string[])> = {

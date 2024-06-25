@@ -131,7 +131,7 @@ export type VideoObject = {
 export interface Video extends Database {
     /** Objeto con la Información de la Portada Principal del Vídeo para la Aplicación */
     cover: File,
-    /** Identificador Único (UUID) del Vídeo Ubicado en BunnyCDN para la Aplicación */
+    /** Identificador Único (UUID) del Vídeo Ubicado en el Proveedor de Vídeo para la Aplicación */
     key: string,
     /** Objeto con la Información del Juego Asociado al Vídeo para la Aplicación */
     game: Game,
@@ -147,7 +147,9 @@ export interface Video extends Database {
         title: string,
         /** Descripción Acerca del Propósito del Vídeo en la Aplicación */
         description?: string
-    }
+    },
+    /** Cantidad Total de Visitas del Vídeo en la Aplicación */
+    view: number
 };
 
 /** Definición del Objeto de Respuesta de un Comentario para la Aplicación */

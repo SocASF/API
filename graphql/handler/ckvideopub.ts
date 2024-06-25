@@ -5,18 +5,14 @@
 @description Handlers para la Aplicación "CKVideoPub" del Proyecto
 @date 10/06/24 07:00PM
 */
-import {BunnyCDNStream} from '../../util/configuration';
 import {GraphQLCatch,GraphQLResponse} from '../../util/graphql';
 import {GraphQLJSON} from 'graphql-type-json';
-import {createHash} from 'crypto';
+import {CloudFlareStreamHTTP} from '../../util/http';
 import Database from '../../bin/database';
 import type {Game,GameObject,Video,VideoObject,Comment,CommentObject} from '../../types/database/service/ckvideopub';
 import type {GraphQLMutateResponse} from '../../types/response';
 import type GraphQLContext from '../../types/context';
 import type Response from '../../types/response';
-
-/** Objeto con la Información Esencial de BunnyCDN Stream */
-const bunny = (BunnyCDNStream());
 
 /** Objeto con los Handlers Esenciales para la Aplicación */
 export default {
@@ -25,22 +21,24 @@ export default {
     /** Contenedor con los Tipos de Handlers Mutadores para GraphQL */
     Mutation: {
         /** Definición del Mutador para la Alteración de los Me Gusta de un Vídeo de la Aplicación */
-        async fd38f7f3e(_,{a4ee44f99,a994efdc3}:{
+        async fd38f7f3e(_,{a4ee44f99,a994efdc3,afa7aeffb}:{
             /** Identificador Único (UUID) del Vídeo para su Mutación en la Base de Datos */
             a4ee44f99: string,
-            /** Me Gusta Actual del Vídeo desde el Cliente para la Mutación de la Solicitud */
-            a994efdc3: number
+            /** Estádistica Actual del Vídeo desde el Cliente para la Mutación de la Solicitud */
+            a994efdc3: number,
+            /** Nombre del Atributo Actual para la Alteración en la Base de Datos */
+            afa7aeffb: string
         },{language}:GraphQLContext): Promise<GraphQLMutateResponse> {
             const _db_ = (new Database(language));
+            let _obj_: any = {};
+            _obj_[afa7aeffb] = (a994efdc3 + 1);
             try{
-                const {like}: Video = (await _db_["updateOne"]("ckpVideo",a4ee44f99,{
-                    like: (a994efdc3 + 1)
-                })) as any;
+                const videoNewState = (await _db_["updateOne"]("ckpVideo",a4ee44f99,_obj_)) as any;
                 return ({
                     status: true,
                     message: "Se ha actualizado con éxito la estádistica en el vídeo solicitado",
                     context: {
-                        newLikedContext: like
+                        newLikedContext: videoNewState[afa7aeffb]
                     }
                 });
             }catch(e){
@@ -261,6 +259,7 @@ export default {
                         "identified",
                         "key",
                         "like",
+                        "view",
                         {
                             cover: [
                                 "id"
@@ -312,15 +311,7 @@ export default {
                 }))!;
                 const _mutated_: VideoObject[] = [];
                 (await Promise["all"](
-                    (_instance_["map"](async({cover,translation,identified,character,key,date_created,like},iterator) => {
-                        const _bcdn_ = (await (await fetch(`https://video.bunnycdn.com/library/${bunny["ckvideopub"]["container"]["libraryID"]}/videos/${key}`,{
-                            cache: "force-cache",
-                            headers: {
-                                Accept: "application/json",
-                                AccessKey: bunny["ckvideopub"]["container"]["accessKey"]
-                            }
-                        }))["json"]());
-                        const _timer_: number = (Math["floor"]((Date["now"]()) / 1000) + 3600);
+                    (_instance_["map"](async({cover,translation,identified,character,key,date_created,like,view},iterator) => {
                         let _character_: any = {};
                         if(character){
                             const _characterIllustration_ = [
@@ -347,10 +338,13 @@ export default {
                             description: translation[0]["description"],
                             key: identified,
                             character: (character ? _character_ : undefined),
-                            view: _bcdn_["views"],
-                            endpoint: `https://iframe.mediadelivery.net/embed/${_bcdn_["videoLibraryId"]}/${_bcdn_["guid"]}?token=${createHash("sha256")["update"](`${bunny["ckvideopub"]["container"]["secretKey"]}${key}${_timer_}`)["digest"]("hex")}&expires=${_timer_}&autoplay=false&loop=false&muted=false&preload=false&responsive=true`,
+                            view,
+                            endpoint: ((await CloudFlareStreamHTTP({key,token:true}))["result"]["token"]),
                             createAt: date_created,
-                            duration: _bcdn_["length"],
+                            duration: ((await CloudFlareStreamHTTP({
+                                key,
+                                token: false
+                            }))["result"]["duration"] ?? 0),
                             populate: like
                         } as VideoObject));
                     }))

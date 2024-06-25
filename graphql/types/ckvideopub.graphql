@@ -65,7 +65,7 @@ type fbd45e939O {
     view: Int!
     endpoint: String!
     createAt: String!
-    duration: Int!
+    duration: Float!
     populate: Int!
 }
 
@@ -118,6 +118,6 @@ input fd613979cI_Value {
 }
 
 type Mutation {
-    fd38f7f3e(a4ee44f99:String!,a994efdc3:Int!): GraphQLMutatedResponse
+    fd38f7f3e(a4ee44f99:String!,a994efdc3:Int!,afa7aeffb:String!): GraphQLMutatedResponse
     fd613979c(a7fa34be8:String!,ae08f6691:fd613979cI_Value!,c55b1270:String): GraphQLMutatedResponse
 }

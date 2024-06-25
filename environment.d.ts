@@ -27,12 +27,10 @@ declare global {
             CKGlobParamDefineReCaptchaKeysSecret: string,
             /** Definición de la Clave de Acceso a la API de Brevo en el Servidor */
             CKGlobParamDefineBrevoSMTPKeyAccess: string,
-            /** Números Identificativos de las Librerias de Vídeo de BunnyCDN del Proyecto (separadas por comas) */
-            CKGlobParamDefineBunnyCDNStreamLibraryID: string,
-            /** Claves de Acceso a la API para BunnyCDN Stream del Proyecto (separadas por comas) */
-            CKGlobParamDefineBunnyCDNStreamAccessKey: string,
-            /** Claves Secretos para el Hasheo de los Tokens para el Acceso a los Vídeos de BunnyCDN Stream del Proyecto (separadas por comas) */
-            CKGlobParamDefineBunnyCDNStreamHashedSecretKey: string
+            /** Definición de la Clave de Acceso a la API de CloudFlare Stream en el Servidor */
+            CKGlobParamDefineCloudFlareStreamAccessToken: string,
+            /** Definición del Identificador de Cuenta de CloudFlare del Proyecto en el Servidor */
+            CKGlobParamDefineCloudFlareAccountIdentified: string
         }
     }
 }
